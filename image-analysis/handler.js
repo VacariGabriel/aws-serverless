@@ -104,5 +104,4 @@ const handler = new Handler({
   translatorSvc: translator
 })
 
-// bind -> ignore all variable except the function scope.
 module.exports.main = handler.main.bind(handler)
