@@ -39,6 +39,6 @@ If you are not in production, always deploy the environment to check for possibl
 ```
 **Remove all from AWS**
 ```
-sls remove
+    sls remove
 ```
 
