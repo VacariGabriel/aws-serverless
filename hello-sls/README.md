@@ -2,17 +2,13 @@
 
 A simple lambda with *serverless framework*.
 
+## Installation
+
+```
+    npm i -g serverless
+```
+
 ## How to run ?
-
-**Install framework**
-```
-    npm i -g serverless 
-```
-
-**Create project**
-```
-    sls
-```
 
 **Good Practice**
 
