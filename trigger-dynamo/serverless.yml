@@ -39,7 +39,7 @@ resources:
 
 functions:
   viking-insert:
-    handler: handler.vikingsInsert
+    handler: handler.vikingInsert
     events:
       - http:
           path: vikings
@@ -55,5 +55,5 @@ functions:
             Fn::GetAtt:
               - VikingsTable
               - StreamArn
-              
+
 
