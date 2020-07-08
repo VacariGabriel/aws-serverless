@@ -42,7 +42,7 @@ class Handler {
 
     async main(event) {
         try {
-            const data = event.body
+            const data = JSON.parse(event.body)
             const dbParams = this.prepareData(data)
             await this.insertItem(dbParams)
 
