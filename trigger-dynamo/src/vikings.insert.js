@@ -1,9 +1,18 @@
 const uuid = require('uuid')
-
+const Joi = require('@hapi/joi')
+const validator = require('./util/validator')
+const globalEnum = require('./util/globalEnum')
 class Handler {
     constructor({ dynamoDbSvc }) {
         this.dynamoDbSvc = dynamoDbSvc
         this.dynamoDbTable = process.env.DYNAMODB_TABLE
+    }
+
+    static validator() {
+        return Joi.object({
+            name: Joi.string().max(50).min(2).required(),
+            birth: Joi.string().max(15).min(3).required()
+        })
     }
 
     async insertItem(params) {
@@ -64,4 +73,4 @@ const handler = new Handler({
     dynamoDbSvc: dynamoDB
 })
 
-module.exports = handler.main.bind(handler)
+module.exports = validator(handler.main.bind(handler), Handler.validator(), globalEnum.ARG_TYPE.BODY)
