@@ -7,6 +7,8 @@ provider:
   stage: ${opt:stage, "qa"}
   environment:
     ${file(./config/env.${self:provider.stage}.json)}
+  iamRoleStatements:
+    ${file(./config/serverless/db.iam.role.yml)}
 
 custom:
   schedulerRate: rate(1 minute)
@@ -14,6 +16,10 @@ custom:
   tableName: ${self:provider.environment.DbTableName}
   dbWriteCapacityUnits: ${self:provider.environment.DbWriteCapacityUnits}
   dbReadCapacityUnits: ${self:provider.environment.DbReadCapacityUnits}
+
+resources:
+  Resources:
+    ${file(./config/serverless/resources/dynamo.viking.table.yml)}
 
 functions:
   commit-message-scheduler:
