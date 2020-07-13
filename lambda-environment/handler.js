@@ -1,20 +1,34 @@
 'use strict';
-const settings = require('./config/settings')
+const settings = require('./config/settings');
+const axios = require('axios')
+const cheerio = require('cheerio');
+const AWS = require('aws-sdk')
+const dynamoDB = new AWS.DynamoDB.DocumentClient()
+const uuid = require('uuid')
 
-module.exports.scheduler = async event => {
-  console.log('env var', settings)
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+class Handler {
+  static async main(event) {
+    const { data } = await axios.get(settings.commitMessageUrl)
+    const $ = cheerio.load(data)
+    const [commitMessage] = await $("#content").text().trim().split("\n")
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+    const params = {
+      TableName: settings.dbTableName,
+      Item: {
+        commitMessage,
+        id: uuid.v1(),
+        createdAt: new Date().toISOString()
+      }
+    }
+
+    await dynamoDB.put(params).promise()
+
+    return {
+      statusCode: 200
+    }
+  }
+}
+
+module.exports = {
+  scheduler: Handler.main
+}
